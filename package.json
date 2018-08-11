@@ -1,12 +1,33 @@
 {
   "name": "skkugls",
   "version": "1.0.0",
-  "description": "",
+  "description": "SKKU GLS for windows",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron ."
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kjs104901/skkugls.git"
+  },
+  "bugs": {
+    "url": "https://github.com/kjs104901/skkugls/issues"
+  },
+  "homepage": "https://github.com/kjs104901/skkugls#readme",
+  "devDependencies": {
+    "electron": "^2.0.7"
+  },
+  "dependencies": {
+    "charset": "^1.0.1",
+    "electron-dl": "^1.12.0",
+    "electron-updater": "^3.1.1",
+    "iconv-lite": "^0.4.23",
+    "node-machine-id": "^1.1.10",
+    "regedit": "^3.0.0",
+    "xml2js": "^0.4.19"
+  }
 }
