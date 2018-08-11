@@ -2,10 +2,32 @@
   "name": "skkugls",
   "version": "1.0.0",
   "description": "SKKU GLS for windows",
-  "main": "index.js",
+  "main": "./index.js",
   "scripts": {
+    "start": "electron .",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "electron ."
+    "dist": "electron-builder",
+    "postinstall": "electron-builder install-app-deps"
+  },
+  "build": {
+    "appId": "com.lemon-puppy.skkugls",
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "./icon.ico",
+      "asar": "false"
+    },
+    "nsis": {
+      "oneClick": true,
+      "createDesktopShortcut": "always",
+      "installerHeaderIcon": "./icon.ico"
+    }
   },
   "keywords": [],
   "author": "",
@@ -19,7 +41,8 @@
   },
   "homepage": "https://github.com/kjs104901/skkugls#readme",
   "devDependencies": {
-    "electron": "^2.0.7"
+    "electron": "^2.0.7",
+    "electron-builder": "^20.27.1"
   },
   "dependencies": {
     "charset": "^1.0.1",
@@ -28,6 +51,7 @@
     "iconv-lite": "^0.4.23",
     "node-machine-id": "^1.1.10",
     "regedit": "^3.0.0",
+    "request": "^2.88.0",
     "xml2js": "^0.4.19"
   }
 }
