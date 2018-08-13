@@ -20,13 +20,11 @@
           ]
         }
       ],
-      "icon": "./icon.ico",
       "asar": "false"
     },
     "nsis": {
       "oneClick": true,
-      "createDesktopShortcut": "always",
-      "installerHeaderIcon": "./icon.ico"
+      "createDesktopShortcut": "always"
     }
   },
   "keywords": [],

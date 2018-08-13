@@ -25,6 +25,16 @@ let loginWindowSetting = {
     icon: "./html/icon.ico"
 };
 
+let updaterWindow;
+let updaterWindowSetting = {
+    width: 500, height: 410,
+    frame: false,
+    show: false,
+    resizable: false,
+    backgroundColor: "#FFFFFF",
+    icon: "./html/icon.ico"
+}
+
 process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true';
 
 // single instance
@@ -49,12 +59,40 @@ if (shouldQuit) {
 }
 
 app.on('ready', () => {
-    autoUpdater.checkForUpdatesAndNotify();
+    autoUpdater.autoDownload = false;
+    autoUpdater.checkForUpdates();
     loginWindowOpen();
 });
 
+/// updater
+let updateReleaseNotes = "";
+
+autoUpdater.on('checking-for-update', () => { });
+autoUpdater.on('update-available', (info) => {
+    updateReleaseNotes = info.releaseNotes;
+    updaterWindowOpen();
+});
+
+autoUpdater.on('update-not-available', (info) => {});
+autoUpdater.on('error', (err) => {});
+autoUpdater.on('download-progress', (progressObj) => {
+    if (updaterWindow) {
+        if (!updaterWindow.isDestroyed()) {
+            updaterWindow.webContents.send('updaterProgress', progressObj.percent);
+        }
+    }
+});
+autoUpdater.on('update-downloaded', (info) => {
+    if (updaterWindow) {
+        if (!updaterWindow.isDestroyed()) {
+            updaterWindow.webContents.send('updaterFinished', true);
+        }
+    }
+})
+
 app.on('window-all-closed', () => {
     loginWindow = null;
+    updaterWindow = null;
     app.quit();
 })
 
@@ -79,6 +117,21 @@ const loginWindowOpen = () => {
         if (isDevelopment) {
             loginWindow.webContents.openDevTools();
         }
+    })
+}
+
+const updaterWindowOpen = () => {
+    if (updaterWindow) {
+        if (!updaterWindow.isDestroyed()) {
+            updaterWindow.close();
+        }
+    }
+    updaterWindow = new BrowserWindow(updaterWindowSetting);
+    updaterWindow.loadFile('./html/updater.html');
+
+    updaterWindow.once('ready-to-show', () => {
+
+        updaterWindow.show();
     })
 }
 
@@ -202,6 +255,22 @@ ipcMain.on("glsDownloadStartReq", (event, message) => {
         event.sender.send("glsDownloadStartRes", result);
     });
 })
+
+ipcMain.on("installUpdaterReq", (event, message) => {
+    autoUpdater.quitAndInstall();
+});
+
+ipcMain.on("downUpdaterReq", (event, message) => {
+    autoUpdater.downloadUpdate();
+});
+
+ipcMain.on("updateInfoReq", (event, message) => {
+    event.sender.send("updateInfoRes", {
+        data: {
+            updateReleaseNotes: updateReleaseNotes
+        }
+    });
+});
 
 //// ------------ IPC backend functions ------------ ////
 ////// for action
