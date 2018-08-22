@@ -20,6 +20,7 @@
           ]
         }
       ],
+      "icon": "./icon.ico",
       "asar": "false"
     },
     "nsis": {

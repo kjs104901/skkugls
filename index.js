@@ -187,12 +187,12 @@ const reserveTimeoutSend = (sender, messageType, timeoutSecond, callback) => {
 };
 
 const checkLoginElseTryPortal = (callback) => {
-    portal.loginCheck((result) => {
+    portal.newLoginCheck((result) => {
         if (result == true) {
             callback(true);
         }
         else {
-            portal.login(userId, userPass, (result) => {
+            portal.newLogin(userId, userPass, (result) => {
                 if (result) {
                     callback(true);
                 }
@@ -289,7 +289,7 @@ const checkGLSInstalledRequest = (callback) => {
 }
 
 const loginRequest = (userId, userPass, callback) => {
-    portal.login(userId, userPass, (result) => {
+    portal.newLogin(userId, userPass, (result) => {
         if (result) {
             callback({
                 data: {
@@ -311,7 +311,7 @@ const openGLSRequest = (callback) => {
     if (isInstalled) {
         checkLoginElseTryPortal((result) => {
             if (result) {
-                portal.getGlobalVal((globalVal) => {
+                portal.newGetGlobalVal((globalVal) => {
                     if (0 < globalVal.length) {
                         gls.setGlobalVal(globalVal, (result) => {
                             if (result == true) {
